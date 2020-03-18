@@ -5,18 +5,26 @@
     <title>Title</title>
 </head>
 <body>
-    <h1>UsersList</h1>
-    <table>
-        <tr>
-            <th>Fullname</th>
-            <th>Tabnum</th>
-        </tr>
-            <#list users as user>
-                <tr>
-                    <td>${user.getFullname()}</td>
-                    <td>${user.getTabNum()}</td>
-                </tr>
-            </#list>
-    </table>
+    <h1>Список опозданий за неделю</h1>
+    <#list users as user>
+        <h3>${user.getFullname()}<h3>
+
+            <table>
+            <#-- Шапка таблицы -->
+                <tr><th>Время прихода</th></tr>
+                <tr><th>Время ухода</th></tr>
+
+            <#assign factShedules = user.getFactWeeklyShedule()>
+
+            <#-- Поля таблицы -->
+                <#list factShedules as factShedule>
+                    <tr>
+                        <td>${factShedule.getStartTime()?string("dd/MM/yyyy HH:mm:ss")}</td>
+                        <td>${factShedule.getEndTime()?string("dd/MM/yyyy HH:mm:ss")}</td>
+                    </tr>
+                </#list>
+            </table>
+
+    </#list>
 </body>
 </html>

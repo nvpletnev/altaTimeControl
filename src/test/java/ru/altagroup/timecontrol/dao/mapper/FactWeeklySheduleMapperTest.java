@@ -8,7 +8,7 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FactSheduleMapperTest {
+class FactWeeklySheduleMapperTest {
 
     @Test
     public void getDate() throws ParseException {

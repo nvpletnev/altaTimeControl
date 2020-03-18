@@ -21,7 +21,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> findAll() {
-        String sql = "SELECT fullname,tabnum FROM users WHERE islocked IS NULL";
+        String sql = "SELECT fullname,uid FROM users WHERE islocked IS NULL";
         return template.query(sql, new UserMapper());
     }
 }

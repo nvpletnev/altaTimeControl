@@ -6,8 +6,8 @@ public class User {
 
     private String fullname;
     private int uid;
-    private List<FactShedule> factShedule;
-    private List<PlanShedule> planShedule;
+    private List<FactWeeklyShedule> factWeeklyShedule;
+    private List<PlanWeeklyShedule> planWeeklyShedule;
 
     public String getFullname() {
         return fullname;
@@ -25,19 +25,19 @@ public class User {
         this.uid = uid;
     }
 
-    public List<FactShedule> getFactShedule() {
-        return factShedule;
+    public List<FactWeeklyShedule> getFactWeeklyShedule() {
+        return factWeeklyShedule;
     }
 
-    public void setFactShedule(List<FactShedule> factShedule) {
-        this.factShedule = factShedule;
+    public void setFactWeeklyShedule(List<FactWeeklyShedule> factWeeklyShedule) {
+        this.factWeeklyShedule = factWeeklyShedule;
     }
 
-    public List<PlanShedule> getPlanShedule() {
-        return planShedule;
+    public List<PlanWeeklyShedule> getPlanWeeklyShedule() {
+        return planWeeklyShedule;
     }
 
-    public void setPlanShedule(List<PlanShedule> planShedule) {
-        this.planShedule = planShedule;
+    public void setPlanWeeklyShedule(List<PlanWeeklyShedule> planWeeklyShedule) {
+        this.planWeeklyShedule = planWeeklyShedule;
     }
 }

@@ -1,8 +1,7 @@
 package ru.altagroup.timecontrol.dao.mapper;
 
 import org.springframework.jdbc.core.RowMapper;
-import ru.altagroup.timecontrol.model.FactShedule;
-import ru.altagroup.timecontrol.model.PlanShedule;
+import ru.altagroup.timecontrol.model.PlanWeeklyShedule;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,22 +9,24 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class PlanSheduleMapper implements RowMapper<PlanShedule> {
+public class PlanSheduleMapper implements RowMapper<PlanWeeklyShedule> {
 
     @Override
-    public PlanShedule mapRow(ResultSet resultSet, int i) throws SQLException {
+    public PlanWeeklyShedule mapRow(ResultSet resultSet, int i) throws SQLException {
         String datePattern = "yyyy-MM-dd h:m:s.S";
         SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
         Date startTime = null;
         Date endTime = null;
+        int uid = 0;
         try {
-            startTime = dateFormat.parse(resultSet.getString("STARTTIME"));
-            endTime = dateFormat.parse(resultSet.getString("ENDTIME"));
+            uid = resultSet.getInt("UID");
+            startTime = dateFormat.parse(resultSet.getString("STARTDATE"));
+            endTime = dateFormat.parse(resultSet.getString("ENDDATE"));
         } catch (ParseException e) {
             System.out.println("Cannot parse date!");
         }
-        PlanShedule planShedule = new PlanShedule(startTime, endTime);
+        PlanWeeklyShedule planWeeklyShedule = new PlanWeeklyShedule(startTime, endTime, uid);
 
-        return planShedule;
+        return planWeeklyShedule;
     }
 }

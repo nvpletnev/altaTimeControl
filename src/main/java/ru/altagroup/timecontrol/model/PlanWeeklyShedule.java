@@ -2,14 +2,16 @@ package ru.altagroup.timecontrol.model;
 
 import java.util.Date;
 
-public class PlanShedule {
+public class PlanWeeklyShedule {
 
     private Date startTime;
     private Date endTime;
+    private int uid;
 
-    public PlanShedule(Date startTime, Date endTime) {
+    public PlanWeeklyShedule(Date startTime, Date endTime, int uid) {
         this.startTime = startTime;
         this.endTime = endTime;
+        this.uid = uid;
     }
 
     public Date getStartTime() {
@@ -18,5 +20,9 @@ public class PlanShedule {
 
     public Date getEndTime() {
         return endTime;
+    }
+
+    public int getUid() {
+        return uid;
     }
 }
