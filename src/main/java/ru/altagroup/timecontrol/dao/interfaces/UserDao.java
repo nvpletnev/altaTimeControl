@@ -1,4 +1,4 @@
-package ru.altagroup.timecontrol.dao;
+package ru.altagroup.timecontrol.dao.interfaces;
 
 import ru.altagroup.timecontrol.model.User;
 

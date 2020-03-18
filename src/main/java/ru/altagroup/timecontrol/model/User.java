@@ -1,9 +1,13 @@
 package ru.altagroup.timecontrol.model;
 
+import java.util.List;
+
 public class User {
 
     private String fullname;
-    private String tabNum;
+    private int uid;
+    private List<FactShedule> factShedule;
+    private List<PlanShedule> planShedule;
 
     public String getFullname() {
         return fullname;
@@ -13,12 +17,27 @@ public class User {
         this.fullname = fullname;
     }
 
-
-    public String getTabNum() {
-        return tabNum;
+    public int getUid() {
+        return uid;
     }
 
-    public void setTabNum(String tabNum) {
-        this.tabNum = tabNum;
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
+
+    public List<FactShedule> getFactShedule() {
+        return factShedule;
+    }
+
+    public void setFactShedule(List<FactShedule> factShedule) {
+        this.factShedule = factShedule;
+    }
+
+    public List<PlanShedule> getPlanShedule() {
+        return planShedule;
+    }
+
+    public void setPlanShedule(List<PlanShedule> planShedule) {
+        this.planShedule = planShedule;
     }
 }

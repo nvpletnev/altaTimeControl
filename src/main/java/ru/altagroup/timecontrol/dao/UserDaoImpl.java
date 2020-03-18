@@ -3,6 +3,7 @@ package ru.altagroup.timecontrol.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import ru.altagroup.timecontrol.dao.interfaces.UserDao;
 import ru.altagroup.timecontrol.dao.mapper.UserMapper;
 import ru.altagroup.timecontrol.model.User;
 
