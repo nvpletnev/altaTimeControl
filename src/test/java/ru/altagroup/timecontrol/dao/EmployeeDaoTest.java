@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 class EmployeeDaoTest {
 
-    private static int uid = 512;
+    private static int uid = 47;
 
     @Autowired
     EmployeeDao employeeDao;

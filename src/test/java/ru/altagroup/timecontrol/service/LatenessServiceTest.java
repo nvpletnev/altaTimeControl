@@ -1,40 +1,51 @@
 package ru.altagroup.timecontrol.service;
 
+import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 import ru.altagroup.timecontrol.dao.EmployeeDao;
 import ru.altagroup.timecontrol.dao.WorkingDayDao;
 import ru.altagroup.timecontrol.model.Employee;
 import ru.altagroup.timecontrol.model.WorkingDay;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component
-public class LatenessService {
 
-    private EmployeeDao employeeDao;
-    private WorkingDayDao workingDayDao;
+@SpringBootTest
+@RunWith(SpringRunner.class)
+class LatenessServiceTest {
 
     @Autowired
-    public LatenessService(EmployeeDao employeeDao, WorkingDayDao workingDayDao) {
-        this.employeeDao = employeeDao;
-        this.workingDayDao = workingDayDao;
-    }
+    LatenessService service;
 
-    public List<Employee> findUsersWithLateness() {
+    @Autowired
+    EmployeeDao employeeDao;
+
+    @Autowired
+    WorkingDayDao workingDayDao;
+
+    @Test
+    public void testLatenessService() {
         Map<Integer, List<WorkingDay>> latenessDays = workingDayDao.findLateness(7);
         Map<Integer, Employee> employees = employeeDao.findAll();
-        List<Employee> employeeList = new ArrayList<>();
+
 
         for (Map.Entry<Integer, List<WorkingDay>> entry : latenessDays.entrySet()) {
+
             Employee employee = employees.get(entry.getKey());
+
             employee.setWorkingDays(entry.getValue());
-            employeeList.add(employee);
+
+            System.out.println(employee.getFullname());
+
+            for (WorkingDay workingDay : employee.getWorkingDays()) {
+                System.out.println(workingDay.getStart() + " " + workingDay.getEnd());
+            }
         }
 
-        return employeeList;
     }
 }

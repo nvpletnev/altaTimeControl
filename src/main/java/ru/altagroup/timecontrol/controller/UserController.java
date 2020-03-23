@@ -17,5 +17,4 @@ public class UserController {
         model.addAttribute("users", latenessService.findUsersWithLateness());
         return "index";
     }
-
 }
