@@ -8,7 +8,7 @@ import ru.altagroup.timecontrol.model.Employee;
 import ru.altagroup.timecontrol.model.WorkingDay;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +17,7 @@ public class LatenessService {
 
     private EmployeeDao employeeDao;
     private WorkingDayDao workingDayDao;
+    private int numberOfDays = 7;
 
     @Autowired
     public LatenessService(EmployeeDao employeeDao, WorkingDayDao workingDayDao) {
@@ -25,16 +26,25 @@ public class LatenessService {
     }
 
     public List<Employee> findUsersWithLateness() {
-        Map<Integer, List<WorkingDay>> latenessDays = workingDayDao.findLateness(7);
+        int numberDays = 7;
         Map<Integer, Employee> employees = employeeDao.findAll();
-        List<Employee> employeeList = new ArrayList<>();
+        Map<Integer, List<WorkingDay>> latenessDays = workingDayDao.findLateness(numberDays);
+        List<Employee> result = new ArrayList<>();
 
-        for (Map.Entry<Integer, List<WorkingDay>> entry : latenessDays.entrySet()) {
-            Employee employee = employees.get(entry.getKey());
-            employee.setWorkingDays(entry.getValue());
-            employeeList.add(employee);
+        for (Map.Entry<Integer, Employee> employeeEntry : employees.entrySet()) {
+            List<String> list = workingDayDao.findAbsenteeism(employeeEntry.getKey(), numberDays);
+            if (latenessDays.containsKey(employeeEntry.getKey())) {
+                employeeEntry.getValue().setWorkingDays(latenessDays.get(employeeEntry.getKey()));
+                if (!list.isEmpty()) {
+                    employeeEntry.getValue().setAbsenteeism(list);
+                }
+                result.add(employeeEntry.getValue());
+            } if (!list.isEmpty() && !result.contains(employeeEntry.getValue())) {
+                employeeEntry.getValue().setAbsenteeism(list);
+                result.add(employeeEntry.getValue());
+            }
         }
-
-        return employeeList;
+        result.sort(Comparator.comparing(Employee::getFullname));
+        return result;
     }
 }

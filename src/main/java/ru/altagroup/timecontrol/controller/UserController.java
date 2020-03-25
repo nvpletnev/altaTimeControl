@@ -12,7 +12,7 @@ public class UserController {
     @Autowired
     public LatenessService latenessService;
 
-    @GetMapping("/users")
+    @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("users", latenessService.findUsersWithLateness());
         return "index";

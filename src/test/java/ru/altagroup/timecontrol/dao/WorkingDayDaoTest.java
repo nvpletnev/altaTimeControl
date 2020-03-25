@@ -20,7 +20,7 @@ class WorkingDayDaoTest {
     WorkingDayDao workingDayDao;
 
     @Test
-    void findFactDays() {
+    public void findFactDays() {
         int uid = 295;
         int countDays = 7;
         Map<Integer, List<WorkingDay>> map = workingDayDao.findFactDays(countDays);
@@ -28,10 +28,18 @@ class WorkingDayDaoTest {
     }
 
     @Test
-    void findPlanDays() {
+    public void findPlanDays() {
         int uid = 295;
         int countDays = 7;
         Map<Integer, List<WorkingDay>> map = workingDayDao.findPlanDays(countDays);
         assertTrue(map.containsKey(uid));
     }
+
+    @Test
+    public void findAbsenteeism() {
+
+        List<String> list = workingDayDao.findAbsenteeism(47, 7);
+        list.forEach(System.out::println);
+    }
+
 }

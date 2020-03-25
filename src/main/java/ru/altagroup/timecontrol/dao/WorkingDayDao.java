@@ -51,7 +51,12 @@ public class WorkingDayDao {
         });
     }
 
-    //todo написать метод для невыходов на работу
+    public List<String> findAbsenteeism(int uid, int days) {
+        String sql = String.format("select uid,startdate from graph_plan " +
+                "where uid=%1$d and (startdate between current_date-%2$d and current_date) " +
+                "and substring(startdate from 1 for 10) not in (select startdate from graph_fact where uid=%1$d)", uid, days);
+        return template.query(sql, ((resultSet, i) -> resultSet.getString("STARTDATE").substring(0, 10)));
+    }
 
     private Map<Integer, List<WorkingDay>> findDays(int days, String table, String column1, String column2) {
         String sql =
