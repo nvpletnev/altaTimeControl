@@ -1,8 +1,6 @@
 package ru.altagroup.timecontrol.entity;
 
 import javax.persistence.*;
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,26 +11,26 @@ public class User {
     private Integer uid;
     private String fullname;
     private Integer isLocked;
-    private List<Timestamp> latenessList = new ArrayList<>();
-    private List<Date> absenteeismList = new ArrayList<>();
+    private List<GraphFact> latenessList = new ArrayList<GraphFact>();
+    private List<GraphPlan> absenteeismList = new ArrayList<GraphPlan>();
 
     @Transient
-    public List<Timestamp> getLatenessList() {
+    public List<GraphFact> getLatenessList() {
         return latenessList;
     }
 
     @Transient
-    public void setLatenessList(List<Timestamp> latenessList) {
+    public void setLatenessList(List<GraphFact> latenessList) {
         this.latenessList = latenessList;
     }
 
     @Transient
-    public List<Date> getAbsenteeismList() {
+    public List<GraphPlan> getAbsenteeismList() {
         return absenteeismList;
     }
 
     @Transient
-    public void setAbsenteeismList(List<Date> absenteeismList) {
+    public void setAbsenteeismList(List<GraphPlan> absenteeismList) {
         this.absenteeismList = absenteeismList;
     }
 
@@ -64,4 +62,16 @@ public class User {
         this.fullname = fullname;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof User) {
+            User user = (User) obj;
+            return this.getUid().equals(user.getUid());
+        } else return false;
+    }
+
+    @Override
+    public String toString() {
+        return this.getFullname();
+    }
 }

@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "GRAPH_PLAN")
@@ -73,4 +74,21 @@ public class GraphPlan {
         this.dinerEnd = dinerEnd;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof GraphPlan) {
+            LocalDate thisPlanDate = LocalDate.from(this.getStartDate().toLocalDateTime());
+            LocalDate planDate = ((GraphPlan) obj).getStartDate().toLocalDateTime().toLocalDate();
+            return this.getUid().equals(((GraphPlan) obj).getUid()) && thisPlanDate.equals(planDate);
+        } else if (obj instanceof GraphFact) {
+            LocalDate thisPlanDate = LocalDate.from(this.getStartDate().toLocalDateTime());
+            LocalDate factDate = ((GraphFact) obj).getStartDate().toLocalDate();
+            return this.getUid().equals(((GraphFact) obj).getUid()) && thisPlanDate.equals(factDate);
+        } else return false;
+    }
+
+    @Override
+    public String toString() {
+        return this.getStartDate() + " " + this.getEndDate();
+    }
 }

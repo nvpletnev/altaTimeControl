@@ -10,8 +10,7 @@ import java.util.List;
 @Repository
 public interface GraphFactRepository extends JpaRepository<GraphFact, Integer> {
 
-
     @Query(value = "SELECT sfcode, uid, startdate, enddate, starttime, endtime FROM graph_fact " +
-            "WHERE startdate BETWEEN current_date - 7  and current_date", nativeQuery = true)
-    public List<GraphFact> findGraphFactByInterval();
+            "WHERE startdate BETWEEN current_date - 7  and current_date - 1", nativeQuery = true)
+    public List<GraphFact> findGraphFact();
 }

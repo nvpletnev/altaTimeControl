@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface UserService {
 
-    public List<User> getUsersWithLateness();
+    public List<User> getUsersWithSheduleFailure();
 }
