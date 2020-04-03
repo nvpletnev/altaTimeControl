@@ -13,7 +13,9 @@ import ru.altagroup.timecontrol.repository.GraphFactRepository;
 import ru.altagroup.timecontrol.repository.GraphPlanRepository;
 import ru.altagroup.timecontrol.repository.UserRepository;
 
+import java.time.DayOfWeek;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -92,6 +94,20 @@ public class UserServiceImplTest {
         } else {
             temp.getLatenessList().add(fact);
             result.add(temp);
+        }
+    }
+
+    @Test
+    public void getLastWeek() {
+        List<LocalDate> lastWeek = new ArrayList<>();
+        for (int i = 1; i <= 7; i++) {
+            LocalDate result = LocalDate.now().minusDays(i);
+            if (!(result.getDayOfWeek() == DayOfWeek.SATURDAY || result.getDayOfWeek() == DayOfWeek.SUNDAY)){
+                lastWeek.add(result);
+            }
+        }
+        for (LocalDate localDate : lastWeek) {
+            System.out.println(localDate);
         }
     }
 }

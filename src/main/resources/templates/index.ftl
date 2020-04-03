@@ -10,47 +10,46 @@
   <body>
       <div class="container-fluid mb-2">
         <nav class="navbar navbar-dark bg-dark">
-          <span class="navbar-brand mb-0 h1">Список опозданий за неделю</span>
+          <span class="navbar-brand mb-0 h1"><h1>Список опозданий за неделю</h1></span>
         </nav>
       </div>
 
         <div class="container-fluid">
-          <div class="row">
-              <#list users as employee>
-                <div class="col-3">
-                  <table class="table table-striped table-bordered">
-                    <thead class="thead-dark">
-                      <tr>
-                        <th>${employee.getFullname()}</th>
-                        <th>Дата</th>
-                        <th>Приход</th>
-                        <th>Уход</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <#assign factShedules = employee.getWorkingDays()>
-                      <#list factShedules as factShedule>
-                        <tr>
-                          <td>Опоздание</td>
-                          <td>${factShedule.getStart()?string("yyyy-MM-dd")}</td>
-                          <td>${factShedule.getStart()?string("HH:mm")}</td>
-                          <td>${factShedule.getEnd()?string("HH:mm")}</td>
-                        </tr>
-                      </#list>
-                      <#assign absenteesmes = employee.getAbsenteeism()>
-                      <#list absenteesmes as absenteesm>
-                        <tr>
-                          <td>Прогул</td>
-                          <td>${absenteesm}</td>
-                          <td>-</td>
-                          <td>-</td>
-                        </tr>
-                      </#list>
-                    </tbody>
-                  </table>
-                </div>
+          <table class="table table-striped">
+            <thead class="thead-dark">
+              <tr>
+                <th><h3>ФИО</h3></th>
+                <#list week as day>
+                <th><h3><p class="text-center">${day}</p></h3></th>
+                </#list>
+              </tr>
+            </thead>
+            <tbody>
+              <#list users as user>
+              <tr>
+                <th><h3><p class="text-uppercase">${user}</p></h3></th>
+
+                <#list week as day>
+                <td>
+                  <#if user.hasLateForDay(day)>
+                  <#assign late = user.getLateForDay(day)>
+                  <h2><p class="text-center">
+                    ${late.getStartTime()?string("HH:mm")} - ${late.getEndTime()?string("HH:mm")}
+                  </p></h2>
+                  <#elseif user.hasAbsenteesmForDay(day)>
+                  <h3><p class="text-danger text-center">Нет отметки</p></h3>
+                  <#else>
+                  <h3><p class="text-center">--</p></h3>
+                  </#if>
+                </td>
+                </#list>
+
+              </tr>
               </#list>
-        </div>
+            </tbody>
+          </table>
+          <#list users as employee>
+          </#list>
       </div>
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

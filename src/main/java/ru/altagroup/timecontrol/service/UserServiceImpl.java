@@ -9,9 +9,12 @@ import ru.altagroup.timecontrol.repository.GraphFactRepository;
 import ru.altagroup.timecontrol.repository.GraphPlanRepository;
 import ru.altagroup.timecontrol.repository.UserRepository;
 
+import java.time.DayOfWeek;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -69,7 +72,20 @@ public class UserServiceImpl implements UserService {
                 }
             }
         }
+        result.sort(Comparator.comparing(User::getFullname));
         return result;
+    }
+
+    @Override
+    public List<LocalDate> getLastWeek() {
+        List<LocalDate> lastWeek = new ArrayList<>();
+        for (int i = 1; i <= 7; i++) {
+            LocalDate result = LocalDate.now().minusDays(i);
+            if (!(result.getDayOfWeek() == DayOfWeek.SATURDAY || result.getDayOfWeek() == DayOfWeek.SUNDAY)){
+                lastWeek.add(result);
+            }
+        }
+        return lastWeek;
     }
 
     private boolean isLate(GraphFact fact, GraphPlan plan) {

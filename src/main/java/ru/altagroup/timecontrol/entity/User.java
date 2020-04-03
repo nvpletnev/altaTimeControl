@@ -1,6 +1,7 @@
 package ru.altagroup.timecontrol.entity;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +63,31 @@ public class User {
         this.fullname = fullname;
     }
 
+    public boolean hasLateForDay(LocalDate date) {
+        return latenessList.stream().filter(graphFact ->
+                LocalDate.from(graphFact.getStartDate().toLocalDate()).equals(date)).count() > 0;
+    }
+
+    public GraphFact getLateForDay(LocalDate date) {
+        return latenessList.stream()
+                .filter(graphFact -> LocalDate.from(graphFact.getStartTime().toLocalDateTime()).equals(date))
+                .findFirst()
+                .get();
+    }
+
+    public boolean hasAbsenteesmForDay(LocalDate date) {
+        return absenteeismList.stream()
+                .filter(graphFact -> LocalDate.from(graphFact.getStartDate().toLocalDateTime()).equals(date))
+                .count() > 0;
+    }
+
+    public GraphPlan getAbsenteesmForDay(LocalDate date) {
+        return absenteeismList.stream()
+                .filter(graphFact -> LocalDate.from(graphFact.getStartDate().toLocalDateTime()).equals(date))
+                .findFirst()
+                .get();
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof User) {
@@ -72,6 +98,8 @@ public class User {
 
     @Override
     public String toString() {
-        return this.getFullname();
+        String[] temp = this.getFullname().split(" ");
+        //return temp[0] + " " + temp[1].substring(0, 1) + "." + temp[2].substring(0, 1);
+        return temp[0] + " " + temp[1].charAt(0) + "." + temp[2].charAt(0);
     }
 }

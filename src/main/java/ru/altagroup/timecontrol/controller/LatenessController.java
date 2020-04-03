@@ -19,6 +19,7 @@ public class LatenessController {
     @GetMapping("/")
     public String getUsersWithFailure(Model model) {
         model.addAttribute("users", userService.getUsersWithSheduleFailure());
+        model.addAttribute("week", userService.getLastWeek());
         return "index";
     }
 }
