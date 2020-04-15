@@ -12,8 +12,8 @@ public class User {
     private Integer uid;
     private String fullname;
     private Integer isLocked;
-    private List<GraphFact> latenessList = new ArrayList<GraphFact>();
-    private List<GraphPlan> absenteeismList = new ArrayList<GraphPlan>();
+    private List<GraphFact> latenessList = new ArrayList();
+    private List<GraphPlan> absenteeismList = new ArrayList();
 
     @Transient
     public List<GraphFact> getLatenessList() {
@@ -64,8 +64,9 @@ public class User {
     }
 
     public boolean hasLateForDay(LocalDate date) {
-        return latenessList.stream().filter(graphFact ->
-                LocalDate.from(graphFact.getStartDate().toLocalDate()).equals(date)).count() > 0;
+        if (latenessList.size() == 0) return false;
+        return latenessList.stream().anyMatch(graphFact ->
+                LocalDate.from(graphFact.getStartTime().toLocalDateTime()).equals(date));
     }
 
     public GraphFact getLateForDay(LocalDate date) {
@@ -76,6 +77,7 @@ public class User {
     }
 
     public boolean hasAbsenteesmForDay(LocalDate date) {
+        if (absenteeismList.size() == 0) return false;
         return absenteeismList.stream()
                 .filter(graphFact -> LocalDate.from(graphFact.getStartDate().toLocalDateTime()).equals(date))
                 .count() > 0;
@@ -99,7 +101,6 @@ public class User {
     @Override
     public String toString() {
         String[] temp = this.getFullname().split(" ");
-        //return temp[0] + " " + temp[1].substring(0, 1) + "." + temp[2].substring(0, 1);
         return temp[0] + " " + temp[1].charAt(0) + "." + temp[2].charAt(0);
     }
 }

@@ -18,7 +18,9 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -42,16 +44,14 @@ public class UserServiceImplTest {
         for (GraphPlan plan : planList) {
             //если у сотрудника несколько приходов и уходов за день
             if (Collections.frequency(factList, plan) > 1) {
-                GraphFact fact = factList.stream()
+                List<GraphFact> tempList = factList.stream()
                         .filter(factTemp -> factTemp.equals(plan))
-                        .reduce((fact1, fact2) -> {
-                            GraphFact temp = new GraphFact();
-                            temp.setStartTime(fact1.getStartTime());
-                            temp.setEndTime(fact2.getEndTime());
-                            temp.setUid(fact1.getUid());
-                            return temp;
-                        })
-                        .get();
+                        .sorted(Comparator.comparing(GraphFact::getStartTime))
+                        .collect(Collectors.toList());
+                GraphFact fact = new GraphFact();
+                fact.setUid(tempList.get(0).getUid());
+                fact.setStartTime(tempList.get(0).getStartTime());
+                fact.setEndTime(tempList.get(tempList.size() - 1).getEndTime());
                 if (isLate(fact, plan)) {
                     addUserWithLatesToResult(result, fact);
                 }
@@ -76,6 +76,10 @@ public class UserServiceImplTest {
         }
         result.forEach(System.out::println);
         Assertions.assertThat(result).isNotEmpty();
+//        User user = new User();
+//        user.setFullname("Медведев Александр Владимирович");
+//        user.setUid(381);
+//        Assertions.assertThat(result).doesNotContain(user);
     }
 
     private boolean isLate(GraphFact fact, GraphPlan plan) {
@@ -84,7 +88,8 @@ public class UserServiceImplTest {
         //вычет обеда
         durationPlan.minusHours(1);
         durationFact.minusHours(1);
-        return durationPlan.toMinutes() < durationFact.toMinutes();
+        return (fact.getStartTime().after(plan.getStartDate()) || fact.getEndTime().before(plan.getEndDate())) ||
+                (durationPlan.toMinutes() < durationFact.toMinutes());
     }
 
     private void addUserWithLatesToResult(List<User> result, GraphFact fact) {
@@ -102,7 +107,7 @@ public class UserServiceImplTest {
         List<LocalDate> lastWeek = new ArrayList<>();
         for (int i = 1; i <= 7; i++) {
             LocalDate result = LocalDate.now().minusDays(i);
-            if (!(result.getDayOfWeek() == DayOfWeek.SATURDAY || result.getDayOfWeek() == DayOfWeek.SUNDAY)){
+            if (!(result.getDayOfWeek() == DayOfWeek.SATURDAY || result.getDayOfWeek() == DayOfWeek.SUNDAY)) {
                 lastWeek.add(result);
             }
         }

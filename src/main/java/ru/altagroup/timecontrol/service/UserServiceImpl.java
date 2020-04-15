@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -40,16 +41,13 @@ public class UserServiceImpl implements UserService {
         for (GraphPlan plan : planList) {
             //если у сотрудника несколько приходов и уходов за день
             if (Collections.frequency(factList, plan) > 1) {
-                GraphFact fact = factList.stream()
-                        .filter(factTemp -> factTemp.equals(plan))
-                        .reduce((fact1, fact2) -> {
-                            GraphFact temp = new GraphFact();
-                            temp.setStartTime(fact1.getStartTime());
-                            temp.setEndTime(fact2.getEndTime());
-                            temp.setUid(fact1.getUid());
-                            return temp;
-                        })
-                        .get();
+                List<GraphFact> tempList = factList.stream().filter(factTemp -> factTemp.equals(plan))
+                        .sorted(Comparator.comparing(GraphFact::getStartTime))
+                        .collect(Collectors.toList());
+                GraphFact fact = new GraphFact();
+                fact.setUid(tempList.get(0).getUid());
+                fact.setStartTime(tempList.get(0).getStartTime());
+                fact.setEndTime(tempList.get(tempList.size() - 1).getEndTime());
                 if (isLate(fact, plan)) {
                     addUserWithLatesToResult(result, fact);
                 }
@@ -94,7 +92,8 @@ public class UserServiceImpl implements UserService {
         //вычет обеда
         durationPlan.minusHours(1);
         durationFact.minusHours(1);
-        return durationPlan.toMinutes() < durationFact.toMinutes();
+        return (fact.getStartTime().after(plan.getStartDate()) || fact.getEndTime().before(plan.getEndDate())) ||
+                (durationPlan.toMinutes() < durationFact.toMinutes());
     }
 
     private void addUserWithLatesToResult(List<User> result, GraphFact fact) {
