@@ -9,7 +9,7 @@ RUN mvn -f /home/app/pom.xml clean package
 #
 # Package stage
 #
-FROM openjdk:11-jre-slim
+FROM openjdk:11
 COPY --from=build /home/app/target/timecontrol.jar /usr/local/lib/timecontrol.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/usr/local/lib/timecontrol.jar"]
